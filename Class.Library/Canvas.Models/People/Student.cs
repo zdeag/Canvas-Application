@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Class.Library.Canvas.Models.People
 {
-    public class Student : People
+    public class Student : Person
     {
-        // Figure out grade situation
+        
 
     }
 }

@@ -14,8 +14,12 @@ namespace Class.Library.Canvas.Models.Courses
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public List<Student> rosterList = new List<Student>();
+        public string SoftPrint => $"[{Code}] {Name}";
+        public string FullPrint => $"[{Code}] {Name} - Description: {Description}";
+
+        public List<Person> rosterList = new List<Person>();
         public List<Assignment> AssignmentList= new List<Assignment>();
+
         //public List<Modules>()
 
     }
