@@ -27,6 +27,6 @@ namespace Class.Library.Canvas.Models.People
 
     public enum PersonClassification
     {
-        Freshman, Sophmore, Junior, Senior
+        Freshman, Sophomore, Junior, Senior
     }
 }

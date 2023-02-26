@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Class.Library.Canvas.Models.People
 {
-    internal class TeachingAssistant : Person
+    public class TeachingAssistant : Person
     {
     }
 }

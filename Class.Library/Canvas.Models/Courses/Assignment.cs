@@ -9,7 +9,7 @@ namespace Class.Library.Canvas.Models.Courses
     public class Assignment
     {
         private static int lastID = 0;
-        private int ID = 0;
+        public int ID = 0;
         public int id
         {
             get
