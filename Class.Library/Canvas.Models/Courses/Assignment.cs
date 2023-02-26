@@ -8,13 +8,28 @@ namespace Class.Library.Canvas.Models.Courses
 {
     public class Assignment
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
+        private static int lastID = 0;
+        public int ID = 0;
+        public int id
+        {
+            get
+            {
+                if (ID == 0)
+                {
+                    ID = ++lastID;
+                }
+                return ID;
+            }
+        }
 
-        public int AvailablePoints { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public decimal AvailablePoints { get; set; }
+        public DateTime DueDate { get; set; }
 
-        public DateTime Start { get; set; }
-
-        public DateTime End { get; set; }
+        public override string ToString()
+        {
+            return $"[{ID}] {DueDate} - {Name} ";
+        }
     }
 }

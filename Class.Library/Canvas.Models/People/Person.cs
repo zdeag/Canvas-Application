@@ -8,11 +8,17 @@ namespace Class.Library.Canvas.Models.People
 {
     public class Person
     {
-        public string Id { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
 
-        public virtual string Print => $"[{Id}] {Name}";
-        public string Classification { get; set; }
-        public string Description { get; set; }
+        public Person()
+        {
+            Name = string.Empty;
+        }
+
+        public override string ToString()
+        {
+            return $"[{ID}] {Name}";
+        }
     }
 }
