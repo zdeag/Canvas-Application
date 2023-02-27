@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Class.Library.Canvas.Models.Courses
 {
-    internal class PageItem : ContentItem
+    public class PageItem : ContentItem
     {
         public string? HtmlBody { get; set; }
     }

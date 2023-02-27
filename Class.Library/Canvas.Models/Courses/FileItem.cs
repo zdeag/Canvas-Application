@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Class.Library.Canvas.Models.Courses
 {
-    internal class FileItem : ContentItem
+    public class FileItem : ContentItem
     {
         public string? Path { get; set; }
     }
