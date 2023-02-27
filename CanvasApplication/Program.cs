@@ -74,10 +74,11 @@ namespace CanvasApplication
             Console.WriteLine("1. Add a New Course");               //course
             Console.WriteLine("2. Update a Course");
             Console.WriteLine("3. Update Student on Course");       //course
-            Console.WriteLine("4. Update Assignment on Course");
-            Console.WriteLine("5. Update Model on Course");
-            Console.WriteLine("6. List all courses");               //course
-            Console.WriteLine("6. Search for a course");            //course
+            Console.WriteLine("4. Update Assignment Groups on Course");
+            Console.WriteLine("5. Update Assignments on Course");
+            Console.WriteLine("6. Update Model on Course");
+            Console.WriteLine("7. List all courses");               //course
+            Console.WriteLine("8. Search for a course");            //course
 
 
             var input = Console.ReadLine();
@@ -97,17 +98,21 @@ namespace CanvasApplication
                 }
                 else if (result == 4)
                 {
-                    courseHelper.UpdateAssignmentMenu();
+                    // Assignment Groups
                 }
                 else if (result == 5)
                 {
-
+                    courseHelper.UpdateAssignmentMenu();
                 }
                 else if (result == 6)
                 {
-                    courseHelper.SearchCourses();
+
                 }
                 else if (result == 7)
+                {
+                    courseHelper.SearchCourses();
+                }
+                else if (result == 8)
                 {
                     Console.WriteLine("Enter a query:");
                     var query = Console.ReadLine() ?? string.Empty;
