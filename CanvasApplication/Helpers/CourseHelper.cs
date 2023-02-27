@@ -213,7 +213,6 @@ namespace CanvasApplication.Helpers
                 Console.WriteLine("3. Remove an Assignment Group");
                 Console.WriteLine("4. Add an Assignment to Group");
                 Console.WriteLine("5. Remove an Assigment from Group");
-                Console.WriteLine("6. List all Assignment Groups");
 
                 var input = Console.ReadLine();
                 if (int.TryParse(input, out int result))
@@ -228,46 +227,23 @@ namespace CanvasApplication.Helpers
                         selectedCourse.AssignmentGroups.ForEach(Console.WriteLine);
                         var userInput = Console.ReadLine();
 
-                        var selectedAssignmentGroup = selectedCourse.AssignmentGroups.FirstOrDefault(s => s.Name.Equals(userInput, StringComparison.InvariantCultureIgnoreCase));
+                        var selectedAssigmnetGroup = selectedCourse.AssignmentGroups.FirstOrDefault(s => s.Name.Equals(userInput, StringComparison.InvariantCultureIgnoreCase));
 
-                        if (selectedAssignmentGroup != null)
+                        if (selectedAssigmnetGroup!= null)
                         {
                             if (result == 2)
                             {
-                                EditAssignmentGroup(selectedAssignmentGroup);
-                            }
-                            else if (result == 3)
+                                /// Edit Assigment
+                            } else if (result == 3) 
                             {
-                                RemoveAssignmentGroup(selectedCourse, selectedAssignmentGroup);
-                            }
-                            else if (result == 4 || result == 5)
+                                // Remove an Assigment Group
+                            } else if (result == 4)
                             {
-                                selectedCourse.Assignments.ForEach(Console.WriteLine);
-                                Console.WriteLine("Please input the ID of the Assignment you want to add/remove:");
-                                var choice = Console.ReadLine() ?? string.Empty;
-
-                                var index = int.Parse(choice);
-
-                                var selectedAssignment = selectedCourse.Assignments.FirstOrDefault(s => s.id.Equals(index));
-                                
-                                if (selectedAssignment != null)
-                                {
-                                    if (result == 4)
-                                    {
-                                        AddAssignmentGrouping(selectedAssignmentGroup, selectedAssignment);
-                                    }
-                                    else if (result == 5)
-                                    {
-                                        RemoveAssignmentGrouping(selectedAssignmentGroup, selectedAssignment);
-                                    }
-                                }
+                                // Add an Assigment to group
+                            } else if (result == 5)
+                            {
+                                // Remove an Assigment from group
                             }
-                        }
-                    } else if (result == 6)
-                    {
-                        if (selectedCourse != null)
-                        {
-                            selectedCourse.AssignmentGroups.ForEach(Console.WriteLine);
                         }
                     }
                 }
@@ -302,58 +278,10 @@ namespace CanvasApplication.Helpers
             };
         }
 
-        private void EditAssignmentGroup(AssignmentGroup a)
+        private void EditAssignmentGroup()
         {
-            Console.WriteLine("Do you want to edit the Assignment Group Name?");
-            var choice = Console.ReadLine() ?? string.Empty;
-
-            if (choice.Equals("Y", StringComparison.InvariantCultureIgnoreCase))
-            {
-                Console.Write("Input Assignment Group Name:");
-                a.Name = Console.ReadLine() ?? string.Empty;
-            }
-
-            Console.WriteLine("Do you want to edit the Assignment Group Description?");
-            choice = Console.ReadLine() ?? string.Empty;
-
-
-            if (choice.Equals("Y", StringComparison.InvariantCultureIgnoreCase))
-            {
-                Console.Write("Input Assignment Group Description:");
-                a.Description = Console.ReadLine() ?? string.Empty;
-            }
-
-            Console.WriteLine("Do you want to edit the Assignment Group's weight?");
-            choice = Console.ReadLine() ?? string.Empty;
-
-            if (choice.Equals("Y", StringComparison.InvariantCultureIgnoreCase))
-            {
-                Console.WriteLine("Input Assignment Group Weight:");
-                var input = Console.ReadLine() ?? string.Empty;
-                var weight = int.Parse(input);
-
-                a.AssignmentWeight = weight;
-            }
+            
         }
-
-        private void RemoveAssignmentGroup(Course c, AssignmentGroup a)
-        {
-            if (c != null && a != null)
-            {
-                c.AssignmentGroups.Remove(a);
-            }
-        }
-
-        private void AddAssignmentGrouping(AssignmentGroup a, Assignment hw)
-        {
-            a.Assignments.Add(hw);
-        }
-
-        private void RemoveAssignmentGrouping(AssignmentGroup a, Assignment hw)
-        {
-            a.Assignments.Remove(hw);
-        }
-
 
         public void UpdateAssignmentMenu()
         {

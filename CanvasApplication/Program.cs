@@ -98,7 +98,7 @@ namespace CanvasApplication
                 }
                 else if (result == 4)
                 {
-                    courseHelper.UpdateAssignmentGroupMenu();
+                    // Assignment Groups
                 }
                 else if (result == 5)
                 {
