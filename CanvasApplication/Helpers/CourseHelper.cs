@@ -121,35 +121,46 @@ namespace CanvasApplication.Helpers
 
         public void UpdateStudentMenu()
         {
-            Console.WriteLine("\n1. Add a Student");
-            Console.WriteLine("2. Remove a Student");
-            Console.WriteLine("Please Select an Option:");
 
-            var input = Console.ReadLine();
-            if (int.TryParse(input, out int result))
-            {
-                if (result == 1)
-                {
-                    AddStudent();
-                }
-                else if (result == 2)
-                {
-                    RemoveStudent();
-                }
-            }
-        }
-
-        public void AddStudent()
-        {
-            Console.WriteLine("Enter the code for the course to add the student to:");
+            Console.WriteLine("Enter the code of the Course you want to Utilize:");
             courseService.Courses.ForEach(Console.WriteLine);
             var selection = Console.ReadLine();
 
             var selectedCourse = courseService.Courses.FirstOrDefault(s => s.Code.Equals(selection, StringComparison.InvariantCultureIgnoreCase));
+
             if (selectedCourse != null)
             {
-                personService.Students.Where(s => !selectedCourse.Roster.Any(s2 => s2.ID == s.ID)).ToList().ForEach(Console.WriteLine);
-                if (personService.Students.Any(s => !selectedCourse.Roster.Any(s2 => s2.ID == s.ID)))
+                Console.WriteLine("\n1. Add a Student");
+                Console.WriteLine("2. Remove a Student");
+                Console.WriteLine("3. Turn in Assignment");
+                Console.WriteLine("Please Select an Option:");
+
+                var input = Console.ReadLine();
+                if (int.TryParse(input, out int result))
+                {
+                    if (result == 1)
+                    {
+                        AddStudent(selectedCourse);
+                    }
+                    else if (result == 2)
+                    {
+                        RemoveStudent(selectedCourse);
+                    }
+                    else if (result == 3)
+                    {
+                        AddCompletedAssignment(selectedCourse);
+                    }
+                }
+            }
+        }
+
+        public void AddStudent(Course c)
+        {
+            var selection = "";
+            if (c != null)
+            {
+                personService.Students.Where(s => !c.Roster.Any(s2 => s2.ID == s.ID)).ToList().ForEach(Console.WriteLine);
+                if (personService.Students.Any(s => !c.Roster.Any(s2 => s2.ID == s.ID)))
                 {
                     selection = Console.ReadLine() ?? string.Empty;
                 }
@@ -160,23 +171,20 @@ namespace CanvasApplication.Helpers
                     var selectedStudent = personService.Students.FirstOrDefault(s => s.ID == selectedId);
                     if (selectedStudent != null)
                     {
-                        selectedCourse.Roster.Add(selectedStudent);
+                        c.Roster.Add(selectedStudent);
                     }
                 }
 
             }
         }
-        public void RemoveStudent()
+        public void RemoveStudent(Course c)
         {
-            Console.WriteLine("Enter the code for the course to remove the student from:");
-            courseService.Courses.ForEach(Console.WriteLine);
-            var selection = Console.ReadLine();
+            var selection = "";
 
-            var selectedCourse = courseService.Courses.FirstOrDefault(s => s.Code.Equals(selection, StringComparison.InvariantCultureIgnoreCase));
-            if (selectedCourse != null)
+            if (c != null)
             {
-                selectedCourse.Roster.ForEach(Console.WriteLine);
-                if (selectedCourse.Roster.Any())
+                c.Roster.ForEach(Console.WriteLine);
+                if (c.Roster.Any())
                 {
                     selection = Console.ReadLine() ?? string.Empty;
                 }
@@ -191,10 +199,79 @@ namespace CanvasApplication.Helpers
                     var selectedStudent = personService.Students.FirstOrDefault(s => s.ID == selectedId);
                     if (selectedStudent != null)
                     {
-                        selectedCourse.Roster.Remove(selectedStudent);
+                        c.Roster.Remove(selectedStudent);
                     }
                 }
 
+            }
+        }
+
+        private void TurnInAssignment(Course c)
+        {
+            c.Assignments.ForEach(Console. WriteLine);
+            Console.WriteLine("Please input the ID of the Assignment you want to turn in");
+            var choice = Console.ReadLine() ?? string.Empty;
+
+            var selectionInt = int.Parse(choice);
+
+            var selectedAssignment = c.Assignments.FirstOrDefault(a => a.ID == selectionInt);
+
+            if (selectedAssignment != null)
+            {
+                
+            }
+        }
+
+        private CompletedAssignment AddCompletedAssignment(Course c)
+        {
+            c.Assignments.ForEach(Console.WriteLine);
+
+            Console.WriteLine("Please input the ID of the assignment you want to turn in: ");
+            var choice = Console.ReadLine() ?? string.Empty;
+
+            var selectionInt = int.Parse(choice);
+
+            var selectedAssignment = c.Assignments.FirstOrDefault(s => s.id.Equals(selectionInt));
+
+            if (selectedAssignment != null)
+            {
+                c.Roster.ForEach(Console.WriteLine);
+
+                Console.WriteLine("Please input your Student ID:");
+                var userInput = Console.ReadLine() ?? string.Empty;
+
+                var selectionUserInt = int.Parse(userInput);
+
+                var selectedStudent = c.Roster.FirstOrDefault(s => s.ID.Equals(selectionUserInt));
+
+                if (selectedStudent != null)
+                {
+                    var selectedAssignmentGroup = "";
+
+
+                    var matchingAssignmentGroup = c.AssignmentGroups.FirstOrDefault(ag =>
+                    ag.Assignments.Any(a => a.ID == a.ID)
+                    );
+
+                    return new CompletedAssignment
+                    {
+                        Id = selectedAssignment.ID,
+                        StudentID = selectedStudent.ID,
+                        Name = selectedAssignment.Name,
+                        Description = selectedAssignment.Description,
+                        AvailablePoints = selectedAssignment.AvailablePoints,
+                        totalPointsGiven = 0,
+                        Weight = matchingAssignmentGroup.AssignmentWeight,
+                        IsGraded = false
+                    };
+                } else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -358,84 +435,69 @@ namespace CanvasApplication.Helpers
 
         public void UpdateAssignmentMenu()
         {
-            Console.WriteLine("\n1. Add an Assignment");
-            Console.WriteLine("2. Remove an Assignment");
-            Console.WriteLine("3. Update an Assignment");
-            Console.WriteLine("Please Select an Option:");
-
-            var input = Console.ReadLine();
-            if (int.TryParse(input, out int result))
-            {
-                if (result == 1)
-                {
-                    AddAssignment();
-                }
-                else if (result == 2)
-                {
-                    RemoveAssignment();
-                }
-                else if (result == 3)
-                {
-                    UpdateAssignment();
-                }
-            }
-        }
-
-        public void AddAssignment()
-        {
             Console.WriteLine("Enter the code for the course to add the assignment to:");
             courseService.Courses.ForEach(Console.WriteLine);
-            var selection = Console.ReadLine();
+            var userInput = Console.ReadLine();
 
-            var selectedCourse = courseService.Courses.FirstOrDefault(s => s.Code.Equals(selection, StringComparison.InvariantCultureIgnoreCase));
+            var selectedCourse = courseService.Courses.FirstOrDefault(s => s.Code.Equals(userInput, StringComparison.InvariantCultureIgnoreCase));
+
             if (selectedCourse != null)
             {
-                selectedCourse.Assignments.Add(CreateAssignment());
+                Console.WriteLine("\n1. Add an Assignment");
+                Console.WriteLine("2. Remove an Assignment");
+                Console.WriteLine("3. Update an Assignment");
+                Console.WriteLine("Please Select an Option:");
+
+                var input = Console.ReadLine();
+                if (int.TryParse(input, out int result))
+                {
+                    if (result == 1)
+                    {
+                        AddAssignment(selectedCourse);
+                    }
+                    else if (result == 2)
+                    {
+                        RemoveAssignment(selectedCourse);
+                    }
+                    else if (result == 3)
+                    {
+                        UpdateAssignment(selectedCourse);
+                    }
+                }
             }
         }
 
-        public void UpdateAssignment()
+        public void AddAssignment(Course c)
         {
-            Console.WriteLine("Enter the code for the course:");
-            courseService.Courses.ForEach(Console.WriteLine);
-            var selection = Console.ReadLine();
+                c.Assignments.Add(CreateAssignment());
+        }
 
-            var selectedCourse = courseService.Courses.FirstOrDefault(s => s.Code.Equals(selection, StringComparison.InvariantCultureIgnoreCase));
-            if (selectedCourse != null)
-            {
+        public void UpdateAssignment(Course c)
+        {
                 Console.WriteLine("Choose an assignment to update:");
-                selectedCourse.Assignments.ForEach(Console.WriteLine);
+                c.Assignments.ForEach(Console.WriteLine);
                 var selectionStr = Console.ReadLine() ?? string.Empty;
                 var selectionInt = int.Parse(selectionStr);
-                var selectedAssignment = selectedCourse.Assignments.FirstOrDefault(a => a.ID == selectionInt);
+                var selectedAssignment = c.Assignments.FirstOrDefault(a => a.ID == selectionInt);
                 if (selectedAssignment != null)
                 {
-                    var index = selectedCourse.Assignments.IndexOf(selectedAssignment);
-                    selectedCourse.Assignments.RemoveAt(index);
-                    selectedCourse.Assignments.Insert(index, CreateAssignment());
-                }
-            }
+                    var index = c.Assignments.IndexOf(selectedAssignment);
+                    c.Assignments.RemoveAt(index);
+                    c.Assignments.Insert(index, CreateAssignment());
+                }          
         }
 
-        public void RemoveAssignment()
+        public void RemoveAssignment(Course c)
         {
-            Console.WriteLine("Enter the code for the course:");
-            courseService.Courses.ForEach(Console.WriteLine);
-            var selection = Console.ReadLine();
-
-            var selectedCourse = courseService.Courses.FirstOrDefault(s => s.Code.Equals(selection, StringComparison.InvariantCultureIgnoreCase));
-            if (selectedCourse != null)
-            {
                 Console.WriteLine("Choose an assignment to delete:");
-                selectedCourse.Assignments.ForEach(Console.WriteLine);
+                c.Assignments.ForEach(Console.WriteLine);
                 var selectionStr = Console.ReadLine() ?? string.Empty;
                 var selectionInt = int.Parse(selectionStr);
-                var selectedAssignment = selectedCourse.Assignments.FirstOrDefault(a => a.ID == selectionInt);
+                var selectedAssignment = c.Assignments.FirstOrDefault(a => a.ID == selectionInt);
                 if (selectedAssignment != null)
                 {
-                    selectedCourse.Assignments.Remove(selectedAssignment);
+                    c.Assignments.Remove(selectedAssignment);
                 }
-            }
         }
 
         private void SetupRoster(Course c)
@@ -516,27 +578,48 @@ namespace CanvasApplication.Helpers
             };
         }
 
-        private void UpdateModuleMenu()
+        public void UpdateModuleMenu()
         {
-            Console.WriteLine("\n1. Add a Module");
-            Console.WriteLine("2. Remove a Module");
-            Console.WriteLine("3. Update Content");
-            Console.WriteLine("Please Select an Option:");
+            Console.WriteLine("Enter the code for the course to add the assignment to:");
+            courseService.Courses.ForEach(Console.WriteLine);
+            var userInput = Console.ReadLine();
 
-            var input = Console.ReadLine();
-            if (int.TryParse(input, out int result))
+            var selectedCourse = courseService.Courses.FirstOrDefault(s => s.Code.Equals(userInput, StringComparison.InvariantCultureIgnoreCase));
+
+            if (selectedCourse != null)
             {
-                if (result == 1)
+                Console.WriteLine("\n1. Add a Module");
+                Console.WriteLine("2. Remove a Module");
+                Console.WriteLine("3. Update Content");
+                Console.WriteLine("Please Select an Option:");
+
+                var input = Console.ReadLine();
+                if (int.TryParse(input, out int result))
                 {
-                    AddAssignment();
-                }
-                else if (result == 2)
-                {
-                    RemoveAssignment();
-                }
-                else if (result == 3)
-                {
-                    UpdateAssignment();
+                    if (result == 1)
+                    {
+                        CreateModule(selectedCourse);
+                    }
+                    else if (result == 2 || result == 3)
+                    {
+                        selectedCourse.Modules.ForEach(Console.WriteLine);
+                        Console.WriteLine("Please input Module Name:");
+
+                        var choice = Console.ReadLine() ?? string.Empty;
+                        var selectedModule = selectedCourse.Modules.FirstOrDefault(m => m.Name.Equals(choice, StringComparison.InvariantCultureIgnoreCase));
+
+                        if (selectedModule != null)
+                        {
+                            if (result == 2)
+                            {
+                                RemoveModule(selectedCourse, selectedModule);
+                            } else if (result == 3)
+                            {
+                                CreateModule(selectedCourse, selectedModule);
+                            }
+                        }
+
+                    }
                 }
             }
         }
@@ -617,6 +700,10 @@ namespace CanvasApplication.Helpers
 
         }
 
+        private void RemoveModule(Course c, Module m)
+        {
+            c.Modules.Remove(m);
+        }
 
         private void CreateContentItemMenu(Course c, Module? selectedModule = null)
         {
@@ -629,31 +716,32 @@ namespace CanvasApplication.Helpers
                 var module = c.Modules.FirstOrDefault(s => s.Name.Equals(selection, StringComparison.InvariantCultureIgnoreCase));
             }
 
-            var choice = "Y";
-
-            Console.WriteLine("Do you want to add/edit Page Item?");
-            choice = Console.ReadLine() ?? string.Empty;
-
-            if (choice.Equals("Y", StringComparison.InvariantCultureIgnoreCase))
+            if (selectedModule != null)
             {
-                CreatePageItem(selectedModule);
-            }
+                var choice = "Y";
 
-            Console.WriteLine("Do you want to add/edit Assignment Item?");
-            choice = Console.ReadLine() ?? string.Empty;
+                Console.WriteLine("Do you want to add/edit Page Item?");
+                choice = Console.ReadLine() ?? string.Empty;
 
-            if (choice.Equals("Y", StringComparison.InvariantCultureIgnoreCase))
-            {
-                // deal with adding // editting assignment item
-            }
+                if (choice.Equals("Y", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    CreatePageItem(selectedModule);
+                }
 
+                Console.WriteLine("Do you want to add/edit Assignment Item?");
+                choice = Console.ReadLine() ?? string.Empty;
 
-            Console.WriteLine("Do you want to add/edit File Item?");
-            choice = Console.ReadLine() ?? string.Empty;
+                if (choice.Equals("Y", StringComparison.InvariantCultureIgnoreCase))
+                {
+                   
+                }
+                Console.WriteLine("Do you want to add/edit File Item?");
+                choice = Console.ReadLine() ?? string.Empty;
 
-            if (choice.Equals("Y", StringComparison.InvariantCultureIgnoreCase))
-            {
-                CreateFileItem(selectedModule);
+                if (choice.Equals("Y", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    CreateFileItem(selectedModule);
+                }
             }
         }
 
@@ -769,6 +857,93 @@ namespace CanvasApplication.Helpers
             }
         }
 
+        private AssignmentItem CreateAssignmentItem(Assignment a)
+        {
+
+            return new AssignmentItem
+            {
+                Assignment = a
+            };
+        }
+
+        private void RemoveAssignmentItem(Module m, Assignment a)
+        {
+
+            var selectedAssignmentItem = m.ContentItems.OfType<AssignmentItem>().FirstOrDefault(s => a.Name.Equals(s.Name, StringComparison.CurrentCultureIgnoreCase));
+
+            if (selectedAssignmentItem != null)
+            {
+                m.ContentItems.Remove(selectedAssignmentItem);
+            }
+        }
+
+        private void ModuleAssignmentManagement(Course c, Module m)
+        {
+            Console.WriteLine("1. Add Assignment to Module");
+            Console.WriteLine("2. Remove Assignment from Module");
+
+            if (int.TryParse(Console.ReadLine(), out int output))
+            {
+                c.Assignments.ForEach(Console.WriteLine);
+
+                Console.WriteLine("Please input Assignment Name: ");
+                var choice = Console.ReadLine() ?? string.Empty;
+
+                var selectedAssignment = c.Assignments.FirstOrDefault(s => s.Name.Equals(choice, StringComparison.InvariantCultureIgnoreCase));
+
+                if (selectedAssignment != null)
+                {
+
+                    if (output == 1)
+                    {
+                        m.ContentItems.Add(CreateAssignmentItem(selectedAssignment));
+                    }
+                    else if (output == 2)
+                    {
+                        RemoveAssignmentItem(m, selectedAssignment);
+                    }
+                }
+            }
+        }
+
+        private void GradeAssignment()
+        {
+            Console.WriteLine("Enter the Code for the Course to update:");
+            courseService.Courses.ForEach(Console.WriteLine);
+            var selection = Console.ReadLine();
+
+            var selectedCourse = courseService.Courses.FirstOrDefault(s => s.Code.Equals(selection, StringComparison.InvariantCultureIgnoreCase));
+
+            if(selectedCourse != null)
+            {
+               foreach (var assignment in selectedCourse.CompletedAssignments.Where(a => a.IsGraded == false))
+               {
+                    Console.WriteLine(assignment);
+               }
+
+                Console.WriteLine("Please input the Assignment ID you want to Grade:");
+
+                var choice = Console.ReadLine() ?? string.Empty;
+
+                var selectedInt = int.Parse(choice);
+
+                var selectedAssignment = selectedCourse.CompletedAssignments.FirstOrDefault(s => s.Id.Equals(selectedInt));
+                if (selectedAssignment != null)
+                {
+                    Console.WriteLine($"{selectedAssignment.Name} - Total Possible Points: {selectedAssignment.AvailablePoints}");
+                    var grade = Console.ReadLine() ?? string.Empty;
+
+                    var gradeInt = int.Parse(grade);
+
+                    selectedAssignment.totalPointsGiven = gradeInt;
+                    selectedAssignment.IsGraded = true;
+
+                    
+
+
+                }
+            }
+        }
 
     }
 }

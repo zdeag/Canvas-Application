@@ -17,6 +17,7 @@ namespace Class.Library.Canvas.Models.Courses
         public int CreditHours { get; set; }
         public List<Person> Roster { get; set; }
         public List<Assignment> Assignments { get; set; }
+        public List<CompletedAssignment> CompletedAssignments { get; set; }
         public List<Module> Modules { get; set; }
         public List<AssignmentGroup> AssignmentGroups { get; set; }
 
@@ -27,6 +28,7 @@ namespace Class.Library.Canvas.Models.Courses
             Description = string.Empty;
             Roster = new List<Person>();
             Assignments = new List<Assignment>();
+            CompletedAssignments = new List<CompletedAssignment>();
             Modules = new List<Module>();
             AssignmentGroups = new List<AssignmentGroup>();
         }

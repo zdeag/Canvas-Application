@@ -98,7 +98,7 @@ namespace CanvasApplication
                 }
                 else if (result == 4)
                 {
-                    // Assignment Groups
+                    courseHelper.UpdateAssignmentGroupMenu();
                 }
                 else if (result == 5)
                 {
@@ -106,13 +106,16 @@ namespace CanvasApplication
                 }
                 else if (result == 6)
                 {
-
+                    courseHelper.UpdateModuleMenu();
+                } else if (result == 7)
+                {
+                    courseHelper.GradeAssignment();
                 }
-                else if (result == 7)
+                else if (result == 8)
                 {
                     courseHelper.SearchCourses();
                 }
-                else if (result == 8)
+                else if (result == 9)
                 {
                     Console.WriteLine("Enter a query:");
                     var query = Console.ReadLine() ?? string.Empty;
